@@ -8,15 +8,10 @@ plugins {
     id 'com.github.hierynomus.license' version '0.13.1'
 }
 
-apply plugin: new GroovyScriptEngine(
-    ['src/main/groovy','src/main/resources'].
-        collect{ file(it).absolutePath }
-        .toArray(new String[2]),
-    project.class.classLoader
-).loadScriptByName('org/ysb33r/gradle/cloudci/CloudCiConditionalPlugin.groovy')
-
 group = 'org.ysb33r.gradle'
-version = '1.0-beta6-SNAPSHOT'
+version = '1.0-SNAPSHOT'
+
+
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
@@ -82,7 +77,7 @@ task environmentTests( type : Test ) {
     reports.html.destination = file("${reporting.baseDir}/environmentTests")
 
     include '**/CloudCiConditionalPluginWithEnvSpec.class'
-    environment APPVEYOR : 1, TRAVIS : 1, CIRCLECI : 1
+    environment APPVEYOR : 1, TRAVIS : 1, CIRCLECI : 1, 'JENKINS_URL' : 1
     dependsOn testClasses
 }
 
@@ -90,23 +85,6 @@ check {
     dependsOn environmentTests
 }
 
-appveyor {
-    test {
-        environment.remove('APPVEYOUR')
-    }
-}
-
-travisci {
-    test {
-        environment.remove('TRAVIS')
-    }
-}
-
-circleci {
-    test {
-        environment.remove('CIRCLECI')
-    }
-}
 
 uploadArchives  {
     repositories {
@@ -184,4 +162,35 @@ task release {
     description "Lifecycle task for release a new version"
     onlyIf notSnapshot
     dependsOn build, publishPlugins, uploadArchives
+}
+
+apply plugin: new GroovyScriptEngine(
+    ['src/main/groovy','src/main/resources'].
+        collect{ file(it).absolutePath }
+        .toArray(new String[2]),
+    project.class.classLoader
+).loadScriptByName('org/ysb33r/gradle/cloudci/CloudCiConditionalPlugin.groovy')
+
+appveyor {
+    test {
+        environment.remove('APPVEYOUR')
+    }
+}
+
+travisci {
+    test {
+        environment.remove('TRAVIS')
+    }
+}
+
+circleci {
+    test {
+        environment.remove('CIRCLECI')
+    }
+}
+
+jenkinsci {
+    test {
+        environment.remove('JENKINS_URL')
+    }
 }

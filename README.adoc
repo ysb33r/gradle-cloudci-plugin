@@ -1,7 +1,9 @@
 = Cloud CI Conditional Plugin for Gradle
 
 Simple plugin that allows for configuration to only become available when
-  running under specific cloud CI providers.
+  running under specific cloud CI providers.This just leads to a more beautiful
+  DSL than having to use `if` conditions and simultaneously having to remember
+  which environmental variables to check.
 
 == Applying the plugin
 
@@ -43,3 +45,14 @@ circleci { // <1>
 }
 ----
 <1> Only run this configuration when on https://circleci.com[Circle CI]
+
+.Jenkins CI
+[source,groovy]
+----
+jenkinsci { // <1>
+   test {
+     jvmArgs '-Xmx:2048m'
+   }
+}
+----
+<1> Only run this configuration when on a https://jenkins.io/index.html[Jenkins CI] server.

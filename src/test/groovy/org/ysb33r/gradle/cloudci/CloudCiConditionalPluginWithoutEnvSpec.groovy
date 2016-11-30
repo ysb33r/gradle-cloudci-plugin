@@ -40,10 +40,11 @@ class CloudCiConditionalPluginWithoutEnvSpec extends Specification {
         project.ext.hasProperty('foo') == null
 
         where:
-        name        | envVar     | extObj
-        'appveyor'  | 'APPVEYOR' | 'appveyor'
-        'travis-ci' | 'TRAVIS'   | 'travisci'
-        'circle-ci' | 'CIRCLECI' | 'circleci'
+        name        | envVar        | extObj
+        'appveyor'  | 'APPVEYOR'    | 'appveyor'
+        'travis-ci' | 'TRAVIS'      | 'travisci'
+        'circle-ci' | 'CIRCLECI'    | 'circleci'
+        'jenkins'   | 'JENKINS_URL' | 'jenkinsci'
     }
 
 }

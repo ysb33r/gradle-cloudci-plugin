@@ -40,10 +40,11 @@ class CloudCiConditionalPluginWithEnvSpec extends Specification {
         project.ext.foo == 'bar'
 
         where:
-        name        | envVar     | extObj
-        'appveyor'  | 'APPVEYOR' | 'appveyor'
-        'travis-ci' | 'TRAVIS'   | 'travisci'
-        'circle-ci' | 'CIRCLECI' | 'circleci'
+        name        | envVar        | extObj
+        'appveyor'  | 'APPVEYOR'    | 'appveyor'
+        'travis-ci' | 'TRAVIS'      | 'travisci'
+        'circle-ci' | 'CIRCLECI'    | 'circleci'
+        'jenkins'   | 'JENKINS_URL' | 'jenkinsci'
     }
 
 }

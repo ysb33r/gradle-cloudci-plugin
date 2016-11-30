@@ -47,6 +47,14 @@ class CloudCiConditionalPlugin implements Plugin<Project> {
                     exe.call()
                 }
             }
+
+            jenkinsci = { Closure cl ->
+                if(System.getenv('JENKINS_URL')) {
+                    Closure exe = cl.clone()
+                    exe.delegate = project
+                    exe.call()
+                }
+            }
         }
     }
 }
