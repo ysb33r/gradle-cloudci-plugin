@@ -1,0 +1,187 @@
+
+plugins {
+    id 'com.gradle.build-scan' version '1.0'
+    id 'groovy'
+    id 'maven'
+    id 'org.ysb33r.bintray' version '1.5'
+    id 'com.gradle.plugin-publish' version '0.9.4'
+    id 'com.github.hierynomus.license' version '0.13.1'
+}
+
+apply plugin: new GroovyScriptEngine(
+    ['src/main/groovy','src/main/resources'].
+        collect{ file(it).absolutePath }
+        .toArray(new String[2]),
+    project.class.classLoader
+).loadScriptByName('org/ysb33r/gradle/cloudci/CloudCiConditionalPlugin.groovy')
+
+group = 'org.ysb33r.gradle'
+version = '1.0-beta6-SNAPSHOT'
+
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+ext {
+    bintrayOwner = 'ysb33r'
+    bintrayRepo = 'grysb33r'
+    moduleName = 'gradle-cloudci-plugin'
+
+    notSnapshot = {!version.endsWith("SNAPSHOT") }
+}
+
+repositories {
+    jcenter()
+}
+
+ext {
+    depSpock = "org.spockframework:spock-core:1.0-groovy-${GroovySystem.version.replaceAll(/\.\d+$/,'')}"
+}
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+
+    testCompile (depSpock) {
+        exclude module : 'groovy-all'
+    }
+}
+
+groovydoc {
+    windowTitle 'Cloud CI Conditional Plugin for Gradle'
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar) {
+    description "An archive of the JavaDocs for Maven Central"
+    classifier "javadoc"
+    from groovydoc //Javadoc
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': moduleName, 'Implementation-Version': version
+    }
+}
+
+test {
+    exclude '**/CloudCiConditionalPluginWithEnvSpec.class'
+}
+
+task environmentTests( type : Test ) {
+    testClassesDir = sourceSets.test.output.classesDir
+    classpath = sourceSets.test.runtimeClasspath
+    reports.html.destination = file("${reporting.baseDir}/environmentTests")
+
+    include '**/CloudCiConditionalPluginWithEnvSpec.class'
+    environment APPVEYOR : 1, TRAVIS : 1, CIRCLECI : 1
+    dependsOn testClasses
+}
+
+check {
+    dependsOn environmentTests
+}
+
+appveyor {
+    test {
+        environment.remove('APPVEYOUR')
+    }
+}
+
+travisci {
+    test {
+        environment.remove('TRAVIS')
+    }
+}
+
+circleci {
+    test {
+        environment.remove('CIRCLECI')
+    }
+}
+
+uploadArchives  {
+    repositories {
+        bintrayMavenDeployer {
+            username    project.properties.bintrayUserName
+            apiKey      project.properties.bintrayApiKey
+            repoOwner   bintrayOwner
+            repoName    bintrayRepo
+            packageName moduleName
+            description 'A plugin that helps you test your plugin against a variety of Gradle versions'
+            tags        'testing','integrationTesting','compatibilityTesting','gradle'
+            licenses          'Apache-2.0'
+            vcsUrl            'https://github.com/ysb33r/gradle-cloudci-plugin.git'
+            autoCreatePackage true
+            updatePackage     true
+            versionAttributes 'gradle-plugin' : "org.ysb33r.cloudci:${group}:${archivesBaseName}"
+        }
+    }
+
+    onlyIf { !version.endsWith("-SNAPSHOT") }
+    mustRunAfter check
+}
+
+pluginBundle {
+    description = 'A plugin that helps you test your plugin against a variety of Gradle versions'
+    website     = 'https://github.com/ysb33r/gradle-cloudci-plugin'
+    vcsUrl      = 'https://github.com/ysb33r/gradle-cloudci-plugin.git'
+
+    tags = ['testing','ci','appveyor','travis-ci']
+
+    plugins {
+        cloudciPlugin {
+            id = 'org.ysb33r.cloudci'
+            displayName = 'Plugin for conditionally adding configuration when on specific cloud CI servers'
+        }
+    }
+
+    mavenCoordinates {
+        groupId = project.group
+        artifactId = project.name
+    }
+}
+
+publishPlugins {
+    onlyIf notSnapshot
+    mustRunAfter check
+}
+
+license {
+    header = rootProject.file('config/HEADER')
+    strictCheck = true
+    ignoreFailures = false
+    ext.year = '2015 - 2016'
+    excludes(['**/*.ad', '**/*.asciidoc', '**/*.adoc', '**/*.md','**/*.properties'])
+    mapping 'gradle', 'SLASHSTAR_STYLE'
+}
+
+buildScan {
+    licenseAgreementUrl = 'https://gradle.com/terms-of-service'
+    licenseAgree = 'yes'
+}
+
+if (JavaVersion.current().isJava8Compatible()) {
+    tasks.withType(Javadoc) {
+        options.addStringOption('Xdoclint:none', '-quiet')
+    }
+}
+
+publishPlugins {
+    onlyIf notSnapshot
+}
+
+task release {
+    group "Release"
+    description "Lifecycle task for release a new version"
+    onlyIf notSnapshot
+    dependsOn build, publishPlugins, uploadArchives
+}

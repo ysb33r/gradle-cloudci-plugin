@@ -1,0 +1,45 @@
+= Cloud CI Conditional Plugin for Gradle
+
+Simple plugin that allows for configuration to only become available when
+  running under specific cloud CI providers.
+
+== Applying the plugin
+
+See https://plugins.gradle.org/plugins/org.ysb33r.cloudci for up to date information
+on applying this plugin.
+
+== Configuration
+
+.Appveyor
+[source,groovy]
+----
+appveyor { // <1>
+   test {
+     jvmArgs '-Xmx:2048m' // <2>
+   }
+}
+----
+<1> Only run this configuration when on https://ci.appveyor.com[AppVeyor]
+<2> By example you can set the JVM Args for tests when on Appveyor
+
+.Travis CI
+[source,groovy]
+----
+travisci { // <1>
+   test {
+     jvmArgs '-Xmx:2048m'
+   }
+}
+----
+<1> Only run this configuration when on https://travis-ci.org[Travis CI]
+
+.Circle CI
+[source,groovy]
+----
+circleci { // <1>
+   test {
+     jvmArgs '-Xmx:2048m'
+   }
+}
+----
+<1> Only run this configuration when on https://circleci.com[Circle CI]
