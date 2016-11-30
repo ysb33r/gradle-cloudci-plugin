@@ -18,43 +18,25 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 /**
- * @author Schalk W. Cronjé
  */
 class CloudCiConditionalPlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
-        project.ext {
-            appveyor = { Closure cl ->
-                if(System.getenv('APPVEYOR')) {
-                    Closure exe = cl.clone()
-                    exe.delegate = project
-                    exe.call()
-                }
-            }
 
-            travisci = { Closure cl ->
-                if(System.getenv('TRAVIS')) {
-                    Closure exe = cl.clone()
-                    exe.delegate = project
-                    exe.call()
-                }
+        def executor = { String envVar, Closure cl ->
+            if(System.getenv(envVar)) {
+                Closure exe = cl.clone()
+                exe.delegate = project
+                exe.call()
             }
+        }
 
-            circleci = { Closure cl ->
-                if(System.getenv('CIRCLECI')) {
-                    Closure exe = cl.clone()
-                    exe.delegate = project
-                    exe.call()
-                }
-            }
-
-            jenkinsci = { Closure cl ->
-                if(System.getenv('JENKINS_URL')) {
-                    Closure exe = cl.clone()
-                    exe.delegate = project
-                    exe.call()
-                }
-            }
+        [ appveyor  : 'APPVEYOR',
+          travisci  : 'TRAVIS',
+          circleci  : 'CIRCLECI',
+          jenkinsci : 'JENKINS_URL'
+        ].each { String ci, String env ->
+            project.ext.set ci, executor.curry(env)
         }
     }
 }
