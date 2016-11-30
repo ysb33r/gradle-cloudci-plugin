@@ -7,7 +7,7 @@ Simple plugin that allows for configuration to only become available when
 
 == Applying the plugin
 
-See https://plugins.gradle.org/plugins/org.ysb33r.cloudci for up to date information
+See https://plugins.gradle.org/plugin/org.ysb33r.cloudci for up to date information
 on applying this plugin.
 
 == Configuration
