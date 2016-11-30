@@ -5,6 +5,19 @@ Simple plugin that allows for configuration to only become available when
   DSL than having to use `if` conditions and simultaneously having to remember
   which environmental variables to check.
 
+Simply becasue typing stuff like this looks ugly in a Gradle build script
+
+[source,groovy]
+----
+if( System.getenv()['APPVEYOR'] ) {
+  test {
+    jvmArgs '-Xmx:2048m'
+  }
+}
+----
+
+Now you can have a slicker DSL to do the same for a variety of CI products.
+
 == Applying the plugin
 
 See https://plugins.gradle.org/plugin/org.ysb33r.cloudci for up to date information
