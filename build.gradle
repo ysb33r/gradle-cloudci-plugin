@@ -9,9 +9,7 @@ plugins {
 }
 
 group = 'org.ysb33r.gradle'
-version = '1.1-SNAPSHOT'
-
-
+version = '2.0-SNAPSHOT'
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
@@ -171,26 +169,28 @@ apply plugin: new GroovyScriptEngine(
     project.class.classLoader
 ).loadScriptByName('org/ysb33r/gradle/cloudci/CloudCiConditionalPlugin.groovy')
 
-appveyor {
-    test {
-        environment.remove('APPVEYOUR')
+cloudci {
+    appveyor {
+        test {
+            environment.remove('APPVEYOUR')
+        }
     }
-}
 
-travisci {
-    test {
-        environment.remove('TRAVIS')
+    travisci {
+        test {
+            environment.remove('TRAVIS')
+        }
     }
-}
 
-circleci {
-    test {
-        environment.remove('CIRCLECI')
+    circleci {
+        test {
+            environment.remove('CIRCLECI')
+        }
     }
-}
 
-jenkinsci {
-    test {
-        environment.remove('JENKINS_URL')
+    jenkinsci {
+        test {
+            environment.remove('JENKINS_URL')
+        }
     }
 }

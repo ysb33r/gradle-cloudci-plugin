@@ -29,7 +29,7 @@ class CloudCiConditionalPluginWithEnvSpec extends Specification {
         when:
         def project = ProjectBuilder.builder().build()
         project.apply plugin : 'org.ysb33r.cloudci'
-        project."${extObj}" {
+        project.cloudci."${extObj}" {
             ext {
                 foo = 'bar'
             }

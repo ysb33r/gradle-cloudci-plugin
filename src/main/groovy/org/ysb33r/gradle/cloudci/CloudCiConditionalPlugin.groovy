@@ -19,24 +19,10 @@ import org.gradle.api.Project
 
 /**
  */
+@CompileStatic
 class CloudCiConditionalPlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
-
-        def executor = { String envVar, Closure cl ->
-            if(System.getenv(envVar)) {
-                Closure exe = cl.clone()
-                exe.delegate = project
-                exe.call()
-            }
-        }
-
-        [ appveyor  : 'APPVEYOR',
-          travisci  : 'TRAVIS',
-          circleci  : 'CIRCLECI',
-          jenkinsci : 'JENKINS_URL'
-        ].each { String ci, String env ->
-            project.ext.set ci, executor.curry(env)
-        }
+        project.extensions.create('cloudci',CloudCiExtension,project)
     }
 }

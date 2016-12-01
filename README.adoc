@@ -28,10 +28,12 @@ on applying this plugin.
 .Appveyor
 [source,groovy]
 ----
-appveyor { // <1>
-   test {
-     jvmArgs '-Xmx:2048m' // <2>
-   }
+cloudci {
+    appveyor { // <1>
+       test {
+         jvmArgs '-Xmx:2048m' // <2>
+       }
+    }
 }
 ----
 <1> Only run this configuration when on https://ci.appveyor.com[AppVeyor]
@@ -40,10 +42,12 @@ appveyor { // <1>
 .Travis CI
 [source,groovy]
 ----
-travisci { // <1>
-   test {
-     jvmArgs '-Xmx:2048m'
-   }
+cloudci {
+    travisci { // <1>
+       test {
+         jvmArgs '-Xmx:2048m'
+       }
+    }
 }
 ----
 <1> Only run this configuration when on https://travis-ci.org[Travis CI]
@@ -51,10 +55,12 @@ travisci { // <1>
 .Circle CI
 [source,groovy]
 ----
-circleci { // <1>
-   test {
-     jvmArgs '-Xmx:2048m'
-   }
+cloudci {
+    circleci { // <1>
+       test {
+         jvmArgs '-Xmx:2048m'
+       }
+    }
 }
 ----
 <1> Only run this configuration when on https://circleci.com[Circle CI]
@@ -62,10 +68,25 @@ circleci { // <1>
 .Jenkins CI
 [source,groovy]
 ----
-jenkinsci { // <1>
-   test {
-     jvmArgs '-Xmx:2048m'
-   }
+cloudci {
+    jenkinsci { // <1>
+       test {
+         jvmArgs '-Xmx:2048m'
+       }
+    }
 }
 ----
 <1> Only run this configuration when on a https://jenkins.io/index.html[Jenkins CI] server.
+
+.Any supported CI
+[source,groovy]
+----
+cloudci {
+    any { // <1>
+       test {
+         jvmArgs '-Xmx:2048m'
+       }
+    }
+}
+----
+<1> Run this configuration if executed under any of the supported CI environments.
