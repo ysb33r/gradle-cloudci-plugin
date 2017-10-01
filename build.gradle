@@ -4,12 +4,12 @@ plugins {
     id 'groovy'
     id 'maven'
     id 'org.ysb33r.bintray' version '1.5'
-    id 'com.gradle.plugin-publish' version '0.9.4'
+    id 'com.gradle.plugin-publish' version '0.9.7'
     id 'com.github.hierynomus.license' version '0.13.1'
 }
 
 group = 'org.ysb33r.gradle'
-version = '2.0'
+version = '2.2'
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
@@ -17,7 +17,7 @@ targetCompatibility = 1.6
 ext {
     bintrayOwner = 'ysb33r'
     bintrayRepo = 'grysb33r'
-    moduleName = 'gradle-cloudci-plugin'
+    moduleName = project.name
 
     notSnapshot = {!version.endsWith("SNAPSHOT") }
 }
@@ -118,11 +118,6 @@ pluginBundle {
             id = 'org.ysb33r.cloudci'
             displayName = 'Plugin for conditionally adding configuration when on specific cloud CI servers'
         }
-    }
-
-    mavenCoordinates {
-        groupId = project.group
-        artifactId = project.name
     }
 }
 
