@@ -78,6 +78,19 @@ cloudci {
 ----
 <1> Only run this configuration when on a https://jenkins.io/index.html[Jenkins CI] server.
 
+.GitLab Runners
+[source,groovy]
+----
+cloudci {
+    gitlabci { // <1>
+       test {
+         jvmArgs '-Xmx:2048m'
+       }
+    }
+}
+----
+<1> Only use this configuration if a GitLab runner is detected.
+
 .Any supported CI
 [source,groovy]
 ----

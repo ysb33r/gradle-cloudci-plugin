@@ -47,6 +47,10 @@ class CloudCiExtension {
         configureConditionally 'jenkinsci',cfg
     }
 
+    void gitlabci(Closure cfg) {
+        configureConditionally 'gitlabci',cfg
+    }
+
     @CompileDynamic
     private configureConditionally (final String envVar,Closure cfg) {
         configureConditionally System.getenv(ENVIRONMENTS[envVar]) != null, cfg
@@ -71,9 +75,10 @@ class CloudCiExtension {
     private Project project
 
     private static Map<String,String> ENVIRONMENTS = [
-        appveyor : 'APPVEYOR',
+        appveyor  : 'APPVEYOR',
         circleci  : 'CIRCLECI',
         jenkinsci : 'JENKINS_URL',
-        travisci  : 'TRAVIS'
+        travisci  : 'TRAVIS',
+        gitlabci  : 'GITLAB_CI'
     ]
 }

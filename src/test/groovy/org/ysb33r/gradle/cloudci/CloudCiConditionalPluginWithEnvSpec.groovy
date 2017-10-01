@@ -45,6 +45,7 @@ class CloudCiConditionalPluginWithEnvSpec extends Specification {
         'travis-ci' | 'TRAVIS'      | 'travisci'
         'circle-ci' | 'CIRCLECI'    | 'circleci'
         'jenkins'   | 'JENKINS_URL' | 'jenkinsci'
+        'gitlab'    | 'GITLAB_CI'   | 'gitlabci'
     }
 
 }
