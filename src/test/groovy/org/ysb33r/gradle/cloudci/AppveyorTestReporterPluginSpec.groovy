@@ -14,38 +14,23 @@
 package org.ysb33r.gradle.cloudci
 
 import org.gradle.testfixtures.ProjectBuilder
-import spock.lang.IgnoreIf
 import spock.lang.Specification
-import spock.lang.Stepwise
-import spock.lang.Unroll
 
+class AppveyorTestReporterPluginSpec extends Specification {
 
-class CloudCiConditionalPluginWithoutEnvSpec extends Specification {
-
-    @Unroll
-    def 'Testing #name run with no environment'() {
-        assert System.getenv()[envVar] == null
+    void 'Apply plugin on appveyor' () {
+        given:
+        assert System.getenv()[envVar]
 
         when:
         def project = ProjectBuilder.builder().build()
-        project.apply plugin : 'org.ysb33r.cloudci'
-        project.cloudci."${extObj}" {
-            ext {
-                foo = 'bar'
-            }
-        }
-        project.evaluate()
+        project.apply plugin : 'org.ysb33r.cloudci.appveyor.testreporter'
 
         then:
-        project.ext.hasProperty('foo') == null
+        noExceptionThrown()
 
         where:
-        name        | envVar        | extObj
-        'appveyor'  | 'APPVEYOR'    | 'appveyor'
-        'travis-ci' | 'TRAVIS'      | 'travisci'
-        'circle-ci' | 'CIRCLECI'    | 'circleci'
-        'jenkins'   | 'JENKINS_URL' | 'jenkinsci'
-        'gitlab'    | 'GITLAB_CI'   | 'gitlabci'
-    }
+        envVar = 'APPVEYOR'
 
+    }
 }

@@ -1,11 +1,12 @@
 = Cloud CI Conditional Plugin for Gradle
+:toc:
 
 Simple plugin that allows for configuration to only become available when
   running under specific cloud CI providers.This just leads to a more beautiful
   DSL than having to use `if` conditions and simultaneously having to remember
   which environmental variables to check.
 
-Simply becasue typing stuff like this looks ugly in a Gradle build script
+Simply because typing stuff like this looks ugly in a Gradle build script
 
 [source,groovy]
 ----
@@ -103,3 +104,20 @@ cloudci {
 }
 ----
 <1> Run this configuration if executed under any of the supported CI environments.
+
+== Pushing test results to Appveyor's Build Worker API
+
+If you have any tasks based up on the Gradle `Test` class, you can have the test results pushed in real time via the Build Worker API. All you need to do is
+
+[source,groovy]
+----
+plugins {
+  id 'org.ysb33r.cloudci.appveyor.testreporter' vresion '<VERSION>' // <1>
+}
+----
+<1> See https://plugins.gradle.org/plugin/org.ysb33r.cloudci.appveyor.testreporter for up to date information
+    on applying this plugin.
+
+Now when run run your tests the results will be posted when your build runs on Appveyor.
+
+Currently only the `Test` task type is supported, which will cover most cases for JVM projects.

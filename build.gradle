@@ -1,4 +1,3 @@
-
 plugins {
     id 'com.gradle.build-scan' version '1.0'
     id 'groovy'
@@ -6,10 +5,11 @@ plugins {
     id 'org.ysb33r.bintray' version '1.5'
     id 'com.gradle.plugin-publish' version '0.9.7'
     id 'com.github.hierynomus.license' version '0.13.1'
+    id 'org.ysb33r.gradletest' version '1.1'
 }
 
 group = 'org.ysb33r.gradle'
-version = '2.2'
+version = '2.3'
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
@@ -19,7 +19,7 @@ ext {
     bintrayRepo = 'grysb33r'
     moduleName = project.name
 
-    notSnapshot = {!version.endsWith("SNAPSHOT") }
+    notSnapshot = { !version.endsWith("SNAPSHOT") }
 }
 
 repositories {
@@ -27,17 +27,30 @@ repositories {
 }
 
 ext {
-    depSpock = "org.spockframework:spock-core:1.1-groovy-${GroovySystem.version.replaceAll(/\.\d+$/,'')}"
+    depSpock = "org.spockframework:spock-core:1.1-groovy-${GroovySystem.version.replaceAll(/\.\d+$/, '')}"
+}
+
+configurations {
+    httpbuilder
+    compile.extendsFrom httpbuilder
+    gradleTestRuntime.extendsFrom httpbuilder
 }
 
 dependencies {
     compile gradleApi()
     compile localGroovy()
-
-    testCompile (depSpock) {
-        exclude module : 'groovy-all'
+    httpbuilder 'io.github.http-builder-ng:http-builder-ng-okhttp:1.0.3'
+    testCompile(depSpock) {
+        exclude module: 'groovy-all'
     }
 }
+
+apply plugin: new GroovyScriptEngine(
+    ['src/main/groovy', 'src/main/resources'].
+        collect { file(it).absolutePath }
+        .toArray(new String[2]),
+    project.class.classLoader
+).loadScriptByName('org/ysb33r/gradle/cloudci/CloudCiConditionalPlugin.groovy')
 
 groovydoc {
     windowTitle 'Cloud CI Conditional Plugin for Gradle'
@@ -67,15 +80,17 @@ jar {
 
 test {
     exclude '**/CloudCiConditionalPluginWithEnvSpec.class'
+    exclude '**/AppveyorTestReporterPluginSpec.class'
 }
 
-task environmentTests( type : Test ) {
+task environmentTests(type: Test) {
     testClassesDir = sourceSets.test.output.classesDir
     classpath = sourceSets.test.runtimeClasspath
     reports.html.destination = file("${reporting.baseDir}/environmentTests")
 
     include '**/CloudCiConditionalPluginWithEnvSpec.class'
-    environment APPVEYOR : 1, TRAVIS : 1, CIRCLECI : 1, 'JENKINS_URL' : 1, 'GITLAB_CI' : 1
+    include '**/AppveyorTestReporterPluginSpec.class'
+    environment APPVEYOR: 1, TRAVIS: 1, CIRCLECI: 1, 'JENKINS_URL': 1, 'GITLAB_CI': 1
     dependsOn testClasses
 }
 
@@ -84,21 +99,21 @@ check {
 }
 
 
-uploadArchives  {
+uploadArchives {
     repositories {
         bintrayMavenDeployer {
-            username    project.properties.bintrayUserName
-            apiKey      project.properties.bintrayApiKey
-            repoOwner   bintrayOwner
-            repoName    bintrayRepo
+            username project.properties.bintrayUserName
+            apiKey project.properties.bintrayApiKey
+            repoOwner bintrayOwner
+            repoName bintrayRepo
             packageName moduleName
             description 'A plugin that helps you test your plugin against a variety of Gradle versions'
-            tags        'testing','integrationTesting','compatibilityTesting','gradle'
-            licenses          'Apache-2.0'
-            vcsUrl            'https://github.com/ysb33r/gradle-cloudci-plugin.git'
+            tags 'testing', 'integrationTesting', 'compatibilityTesting', 'gradle'
+            licenses 'Apache-2.0'
+            vcsUrl 'https://github.com/ysb33r/gradle-cloudci-plugin.git'
             autoCreatePackage true
-            updatePackage     true
-            versionAttributes 'gradle-plugin' : "org.ysb33r.cloudci:${group}:${archivesBaseName}"
+            updatePackage true
+            versionAttributes 'gradle-plugin': "org.ysb33r.cloudci:${group}:${archivesBaseName}"
         }
     }
 
@@ -107,16 +122,21 @@ uploadArchives  {
 }
 
 pluginBundle {
-    description = 'A plugin that helps you test your plugin against a variety of Gradle versions'
-    website     = 'https://github.com/ysb33r/gradle-cloudci-plugin'
-    vcsUrl      = 'https://github.com/ysb33r/gradle-cloudci-plugin.git'
+    website = 'https://github.com/ysb33r/gradle-cloudci-plugin'
+    vcsUrl = 'https://github.com/ysb33r/gradle-cloudci-plugin.git'
 
-    tags = ['testing','ci','appveyor','travis-ci']
+    tags = ['testing', 'ci', 'appveyor', 'travis-ci']
 
     plugins {
         cloudciPlugin {
             id = 'org.ysb33r.cloudci'
             displayName = 'Plugin for conditionally adding configuration when on specific cloud CI servers'
+            description = 'Control Gradle behaviour on a variety of cloud CI platforms'
+        }
+        appveyorRestReporterPlugin {
+            id = 'org.ysb33r.cloudci.appveyor.testreporter'
+            displayName = 'Push test results via Appveyor Build Worker API'
+            description = 'Automatically push the test results in real-time when the build is runnign on Appveyor'
         }
     }
 }
@@ -130,8 +150,8 @@ license {
     header = rootProject.file('config/HEADER')
     strictCheck = true
     ignoreFailures = false
-    ext.year = '2015 - 2016'
-    excludes(['**/*.ad', '**/*.asciidoc', '**/*.adoc', '**/*.md','**/*.properties'])
+    ext.year = '2015 - 2018'
+    excludes(['**/*.ad', '**/*.asciidoc', '**/*.adoc', '**/*.md', '**/*.properties'])
     mapping 'gradle', 'SLASHSTAR_STYLE'
 }
 
@@ -157,17 +177,15 @@ task release {
     dependsOn build, publishPlugins, uploadArchives
 }
 
-apply plugin: new GroovyScriptEngine(
-    ['src/main/groovy','src/main/resources'].
-        collect{ file(it).absolutePath }
-        .toArray(new String[2]),
-    project.class.classLoader
-).loadScriptByName('org/ysb33r/gradle/cloudci/CloudCiConditionalPlugin.groovy')
+
+gradleTest {
+    versions '3.5', '4.8.1'
+}
 
 cloudci {
     appveyor {
         test {
-            environment.remove('APPVEYOUR')
+            environment.remove('APPVEYOR')
         }
     }
 
@@ -189,3 +207,4 @@ cloudci {
         }
     }
 }
+
