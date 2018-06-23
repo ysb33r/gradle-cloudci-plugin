@@ -136,7 +136,7 @@ pluginBundle {
         appveyorRestReporterPlugin {
             id = 'org.ysb33r.cloudci.appveyor.testreporter'
             displayName = 'Push test results via Appveyor Build Worker API'
-            description = 'Automatically push the test results in real-time when the build is runnign on Appveyor'
+            description = 'Automatically push the test results in real-time when the build is running on Appveyor'
         }
     }
 }
