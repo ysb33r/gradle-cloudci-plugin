@@ -151,7 +151,7 @@ license {
     strictCheck = true
     ignoreFailures = false
     ext.year = '2015 - 2018'
-    excludes(['**/*.ad', '**/*.asciidoc', '**/*.adoc', '**/*.md', '**/*.properties'])
+    excludes(['**/*.ad', '**/*.asciidoc', '**/*.adoc', '**/*.md', '**/*.properties', '**/*CompatibilitySpec.groovy'])
     mapping 'gradle', 'SLASHSTAR_STYLE'
 }
 
@@ -181,6 +181,7 @@ task release {
 gradleTest {
     versions '3.5', '4.8.1'
 }
+
 
 cloudci {
     appveyor {
