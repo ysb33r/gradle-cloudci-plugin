@@ -11,18 +11,28 @@
  *
  * ============================================================================
  */
-package org.ysb33r.gradle.cloudci
+package org.ysb33r.gradle.cloudci.internal
 
 import groovy.transform.CompileStatic
-import org.gradle.api.Plugin
-import org.gradle.api.Project
+import org.gradle.api.tasks.testing.TestResult.ResultType
 
 /**
+ * @since 2.3
  */
 @CompileStatic
-class CloudCiConditionalPlugin implements Plugin<Project> {
-    @Override
-    void apply(Project project) {
-        project.extensions.create('cloudci',CloudCiExtension,project)
+class AppveyorUtils {
+
+    static String mapTestResult(ResultType result) {
+        switch(result) {
+            case ResultType.FAILURE:
+                'Failed'
+                break
+            case ResultType.SUCCESS:
+                'Passed'
+                break
+            case ResultType.SKIPPED:
+                'Skipped'
+                break
+        }
     }
 }

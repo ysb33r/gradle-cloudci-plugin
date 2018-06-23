@@ -14,15 +14,18 @@
 package org.ysb33r.gradle.cloudci
 
 import groovy.transform.CompileStatic
-import org.gradle.api.Plugin
-import org.gradle.api.Project
 
-/**
+/** Environmental variables for each CI.
+ *
+ * @since 2.3
  */
 @CompileStatic
-class CloudCiConditionalPlugin implements Plugin<Project> {
-    @Override
-    void apply(Project project) {
-        project.extensions.create('cloudci',CloudCiExtension,project)
-    }
+class CiEnvironments {
+    static final Map<String,String> Service = [
+        appveyor  : 'APPVEYOR',
+        circleci  : 'CIRCLECI',
+        jenkinsci : 'JENKINS_URL',
+        travisci  : 'TRAVIS',
+        gitlabci  : 'GITLAB_CI'
+    ]
 }

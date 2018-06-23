@@ -15,5 +15,6 @@ dsl/.*
 .gradle
 .build
 build
+out
 gradle-app.setting
 TMP

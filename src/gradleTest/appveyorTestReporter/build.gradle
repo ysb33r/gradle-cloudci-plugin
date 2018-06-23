@@ -1,0 +1,47 @@
+plugins {
+    id 'groovy'
+    id 'org.ysb33r.cloudci.appveyor.testreporter'
+}
+
+ext {
+    depSpock = "org.spockframework:spock-core:1.1-groovy-${GroovySystem.version.replaceAll(/\.\d+$/, '')}"
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile localGroovy()
+    testCompile(depSpock) {
+        exclude module: 'groovy-all'
+    }
+}
+
+test {
+    ext {
+        errorTracker = file("${buildDir}/errortracker.txt")
+    }
+
+    doFirst {
+        errorTracker.delete()
+    }
+
+    doLast {
+        if(errorTracker.size()) {
+            throw new GradleException( 'Update occurred during test')
+        }
+    }
+
+    onOutput { descriptor, event ->
+        if(event.message =~ /.*Could not create message for Appveyor because.*/ ) {
+            errorTracker.withWriterAppend { w ->
+                w.println event.message
+            }
+        }
+    }
+}
+
+task runGradleTest {
+    dependsOn test
+}
