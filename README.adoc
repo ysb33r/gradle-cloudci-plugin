@@ -112,7 +112,7 @@ If you have any tasks based up on the Gradle `Test` class, you can have the test
 [source,groovy]
 ----
 plugins {
-  id 'org.ysb33r.cloudci.appveyor.testreporter' vresion '<VERSION>' // <1>
+  id 'org.ysb33r.cloudci.appveyor.testreporter' version '<VERSION>' // <1>
 }
 ----
 <1> See https://plugins.gradle.org/plugin/org.ysb33r.cloudci.appveyor.testreporter for up to date information
