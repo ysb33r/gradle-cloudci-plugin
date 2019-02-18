@@ -26,6 +26,7 @@ class CiEnvironments {
         circleci  : 'CIRCLECI',
         jenkinsci : 'JENKINS_URL',
         travisci  : 'TRAVIS',
-        gitlabci  : 'GITLAB_CI'
+        gitlabci  : 'GITLAB_CI',
+        bamboo    : 'bamboo.build.working.directory'
     ]
 }

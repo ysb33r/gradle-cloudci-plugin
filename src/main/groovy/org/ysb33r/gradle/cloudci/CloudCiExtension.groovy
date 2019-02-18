@@ -51,6 +51,10 @@ class CloudCiExtension {
         configureConditionally 'gitlabci', cfg
     }
 
+    void bamboo(@DelegatesTo(Project) Closure cfg) {
+        configureConditionally 'bamboo', cfg
+    }
+
     void any(Action<Project> cfg) {
         configureConditionally CiEnvironments.Service.values(), cfg
     }
@@ -73,6 +77,10 @@ class CloudCiExtension {
 
     void gitlabci(Action<Project> cfg) {
         configureConditionally 'gitlabci', cfg
+    }
+
+    void bamboo(Action<Project> cfg) {
+        configureConditionally 'bamboo', cfg
     }
 
     private void configureConditionally(final String envVar, Action<Project> cfg) {

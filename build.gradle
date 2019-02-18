@@ -9,7 +9,7 @@ plugins {
 }
 
 group = 'org.ysb33r.gradle'
-version = '2.4-SNAPSHOT'
+version = '2.3.1-SNAPSHOT'
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
