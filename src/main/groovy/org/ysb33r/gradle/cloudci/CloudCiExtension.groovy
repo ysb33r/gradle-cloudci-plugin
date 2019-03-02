@@ -27,8 +27,20 @@ class CloudCiExtension {
         this.project = p
     }
 
+    void no_ci(@DelegatesTo(Project) Closure cfg) {
+        configureConditionally(
+            !(CiEnvironments.SERVICE.values().any { System.getenv(it) != null }),
+            cfg
+        )
+    }
+
+    void any_ci(@DelegatesTo(Project) Closure cfg) {
+        configureConditionally CiEnvironments.SERVICE.values(), cfg
+    }
+
+    @Deprecated
     void any(@DelegatesTo(Project) Closure cfg) {
-        configureConditionally CiEnvironments.Service.values(), cfg
+        any_ci cfg
     }
 
     void appveyor(@DelegatesTo(Project) Closure cfg) {
@@ -55,8 +67,20 @@ class CloudCiExtension {
         configureConditionally 'bamboo', cfg
     }
 
+    void no_ci(Action<Project> cfg) {
+        configureConditionally(
+            !(CiEnvironments.SERVICE.values().any { System.getenv(it) != null }),
+            cfg
+        )
+    }
+
+    void any_ci(Action<Project> cfg) {
+        configureConditionally CiEnvironments.SERVICE.values(), cfg
+    }
+
+    @Deprecated
     void any(Action<Project> cfg) {
-        configureConditionally CiEnvironments.Service.values(), cfg
+        any_ci(cfg)
     }
 
     void appveyor(Action<Project> cfg) {
@@ -84,7 +108,7 @@ class CloudCiExtension {
     }
 
     private void configureConditionally(final String envVar, Action<Project> cfg) {
-        configureConditionally System.getenv(CiEnvironments.Service[envVar]) != null, cfg
+        configureConditionally System.getenv(CiEnvironments.SERVICE[envVar]) != null, cfg
     }
 
     private void configureConditionally(final Iterable<String> envVars, Action<Project> cfg) {
@@ -95,7 +119,7 @@ class CloudCiExtension {
     }
 
     private void configureConditionally(final String envVar, Closure cfg) {
-        configureConditionally System.getenv(CiEnvironments.Service[envVar]) != null, cfg
+        configureConditionally System.getenv(CiEnvironments.SERVICE[envVar]) != null, cfg
     }
 
     private void configureConditionally(final Iterable<String> envVars, Closure cfg) {

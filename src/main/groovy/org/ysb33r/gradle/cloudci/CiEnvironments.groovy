@@ -21,7 +21,7 @@ import groovy.transform.CompileStatic
  */
 @CompileStatic
 class CiEnvironments {
-    static final Map<String,String> Service = [
+    public static final Map<String,String> SERVICE = [
         appveyor  : 'APPVEYOR',
         circleci  : 'CIRCLECI',
         jenkinsci : 'JENKINS_URL',
