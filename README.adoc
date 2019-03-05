@@ -24,9 +24,10 @@ Now you can have a slicker DSL to do the same for a variety of CI products.
 See https://plugins.gradle.org/plugin/org.ysb33r.cloudci for up to date information
 on applying this plugin.
 
-== Configuration
+== Conditional Configuration
 
-.Appveyor
+=== Appveyor
+
 [source,groovy]
 ----
 cloudci {
@@ -40,7 +41,8 @@ cloudci {
 <1> Only run this configuration when on https://ci.appveyor.com[AppVeyor]
 <2> By example you can set the JVM Args for tests when on Appveyor
 
-.Bamboo
+=== Bamboo
+
 [source,groovy]
 ----
 ci {
@@ -53,7 +55,8 @@ ci {
 ----
 <1> Only use this configuration if an https://www.atlassian.com/software/bamboo[Atlassian Bamboo] agent is detected.
 
-.Circle CI
+=== Circle CI
+
 [source,groovy]
 ----
 ci {
@@ -66,7 +69,8 @@ ci {
 ----
 <1> Only run this configuration when on https://circleci.com[Circle CI].
 
-.Codeship
+=== Codeship
+
 [source,groovy]
 ----
 ci {
@@ -79,7 +83,8 @@ ci {
 ----
 <1> Only run this configuration when on https://codeship.com/[Codeship].
 
-.Drone
+=== Drone
+
 [source,groovy]
 ----
 ci {
@@ -92,7 +97,8 @@ ci {
 ----
 <1> Only use this configuration if a https://drone.io[Drone agent] is detected.
 
-.GitLab Runners
+=== GitLab Runners
+
 [source,groovy]
 ----
 ci {
@@ -105,7 +111,8 @@ ci {
 ----
 <1> Only use this configuration if a https://gitlab.com[GitLab runner] is detected.
 
-.Go CD
+=== Go CD
+
 [source,groovy]
 ----
 ci {
@@ -118,7 +125,8 @@ ci {
 ----
 <1> Only run this configuration when on https://www.gocd.org/[Go CD].
 
-.Jenkins CI
+=== Jenkins CI
+
 [source,groovy]
 ----
 ci {
@@ -131,7 +139,8 @@ ci {
 ----
 <1> Only run this configuration when on a https://jenkins.io/index.html[Jenkins CI] server.
 
-.Teamcity
+=== Teamcity
+
 [source,groovy]
 ----
 ci {
@@ -144,7 +153,8 @@ ci {
 ----
 <1> Only run this configuration when on https://www.jetbrains.com/teamcity[Jetbrains Teamcity]
 
-.Travis CI
+=== Travis CI
+
 [source,groovy]
 ----
 ci {
@@ -196,6 +206,6 @@ plugins {
 <1> See https://plugins.gradle.org/plugin/org.ysb33r.cloudci.appveyor.testreporter for up to date information
     on applying this plugin.
 
-Now when run run your tests the results will be posted when your build runs on Appveyor.
+Now when you run your tests the results will be posted when your build runs on Appveyor.
 
 Currently only the `Test` task type is supported, which will cover most cases for JVM projects.
