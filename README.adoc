@@ -40,18 +40,18 @@ cloudci {
 <1> Only run this configuration when on https://ci.appveyor.com[AppVeyor]
 <2> By example you can set the JVM Args for tests when on Appveyor
 
-.Travis CI
+.Bamboo
 [source,groovy]
 ----
 ci {
-    travisci { // <1>
+    bamboo { // <1>
        test {
          jvmArgs '-Xmx:2048m'
        }
     }
 }
 ----
-<1> Only run this configuration when on https://travis-ci.org[Travis CI]
+<1> Only use this configuration if an https://www.atlassian.com/software/bamboo[Atlassian Bamboo] agent is detected.
 
 .Circle CI
 [source,groovy]
@@ -66,6 +66,32 @@ ci {
 ----
 <1> Only run this configuration when on https://circleci.com[Circle CI]
 
+.Drone
+[source,groovy]
+----
+ci {
+    drone { // <1>
+       test {
+         jvmArgs '-Xmx:2048m'
+       }
+    }
+}
+----
+<1> Only use this configuration if a https://drone.io[Drone agent] is detected.
+
+.GitLab Runners
+[source,groovy]
+----
+ci {
+    gitlabci { // <1>
+       test {
+         jvmArgs '-Xmx:2048m'
+       }
+    }
+}
+----
+<1> Only use this configuration if a https://gitlab.com[GitLab runner] is detected.
+
 .Jenkins CI
 [source,groovy]
 ----
@@ -79,44 +105,18 @@ ci {
 ----
 <1> Only run this configuration when on a https://jenkins.io/index.html[Jenkins CI] server.
 
-.GitLab Runners
+.Travis CI
 [source,groovy]
 ----
 ci {
-    gitlabci { // <1>
+    travisci { // <1>
        test {
          jvmArgs '-Xmx:2048m'
        }
     }
 }
 ----
-<1> Only use this configuration if a GitLab runner is detected.
-
-.Bamboo
-[source,groovy]
-----
-ci {
-    bamboo { // <1>
-       test {
-         jvmArgs '-Xmx:2048m'
-       }
-    }
-}
-----
-<1> Only use this configuration if a Bamboo agent is detected.
-
-.Drone
-[source,groovy]
-----
-ci {
-    drone { // <1>
-       test {
-         jvmArgs '-Xmx:2048m'
-       }
-    }
-}
-----
-<1> Only use this configuration if a Drone agent is detected.
+<1> Only run this configuration when on https://travis-ci.org[Travis CI]
 
 .Any supported CI
 [source,groovy]
