@@ -26,7 +26,8 @@ enum CiEnvironment {
     JENKINS_CI('jenkinsci', 'JENKINS_URL'),
     TRAVIS_CI('travisci', 'TRAVIS'),
     GITLAB_CI('gitlabci', 'GITLAB_CI'),
-    BAMBOO('bamboo', 'bamboo_build_working_directory', 'bamboo.build.working.directory')
+    BAMBOO('bamboo', 'bamboo_build_working_directory', 'bamboo.build.working.directory'),
+    DRONE( 'drone', 'DRONE')
 
     final List<String> envVars
     final String id

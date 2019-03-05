@@ -92,6 +92,32 @@ ci {
 ----
 <1> Only use this configuration if a GitLab runner is detected.
 
+.Bamboo
+[source,groovy]
+----
+ci {
+    bamboo { // <1>
+       test {
+         jvmArgs '-Xmx:2048m'
+       }
+    }
+}
+----
+<1> Only use this configuration if a Bamboo agent is detected.
+
+.Drone
+[source,groovy]
+----
+ci {
+    drone { // <1>
+       test {
+         jvmArgs '-Xmx:2048m'
+       }
+    }
+}
+----
+<1> Only use this configuration if a Drone agent is detected.
+
 .Any supported CI
 [source,groovy]
 ----

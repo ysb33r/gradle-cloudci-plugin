@@ -20,30 +20,31 @@ import spock.lang.Unroll
 class CiConditionalPluginWithoutEnvSpec extends Specification {
 
     @Unroll
-    def 'Testing #name run with no environment'() {
-        assert System.getenv()[envVar] == null
+    def 'Testing #env.id run with no environment'() {
+        assert System.getenv()[env.envVars.first()] == null
 
         when:
         def project = ProjectBuilder.builder().build()
         project.apply plugin: 'org.ysb33r.cloudci'
-        project.cloudci."${extObj}" {
+        project.ci."${env.id}" {
             ext {
                 foo = 'bar'
             }
         }
+        project.ci.no_ci {
+            ext {
+                foo2 = 'bar2'
+            }
+        }
+
         project.evaluate()
 
         then:
         project.ext.hasProperty('foo') == null
+        project.ext.foo2 == 'bar2'
 
         where:
-        name        | envVar                           | extObj
-        'appveyor'  | 'APPVEYOR'                       | 'appveyor'
-        'travis-ci' | 'TRAVIS'                         | 'travisci'
-        'circle-ci' | 'CIRCLECI'                       | 'circleci'
-        'jenkins'   | 'JENKINS_URL'                    | 'jenkinsci'
-        'gitlab'    | 'GITLAB_CI'                      | 'gitlabci'
-        'bamboo'    | 'bamboo_build_working_directory' | 'bamboo'
+        env << CiEnvironment.values()
     }
 
 }

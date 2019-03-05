@@ -9,7 +9,7 @@ plugins {
 }
 
 group = 'org.ysb33r.gradle'
-version = '2.5'
+version = '2.6-SNAPSHOT'
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
@@ -91,7 +91,7 @@ task environmentTests(type: Test) {
     include '**/CiConditionalPluginWithEnvSpec.class'
     include '**/AppveyorTestReporterPluginSpec.class'
     environment APPVEYOR: 1, TRAVIS: 1, CIRCLECI: 1, 'JENKINS_URL': 1, 'GITLAB_CI': 1,
-        'bamboo_build_working_directory': 1
+        'bamboo_build_working_directory': 1, DRONE: 1
     dependsOn testClasses
 }
 

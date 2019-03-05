@@ -67,6 +67,10 @@ class CiExtension {
         configureConditionally BAMBOO.detected, cfg
     }
 
+    void drone(@DelegatesTo(Project) Closure cfg) {
+        configureConditionally DRONE.detected, cfg
+    }
+
     void no_ci(Action<Project> cfg) {
         boolean found = CiEnvironment.values().any { CiEnvironment envVars ->
             envVars.detected
@@ -108,6 +112,10 @@ class CiExtension {
 
     void bamboo(Action<Project> cfg) {
         configureConditionally BAMBOO.detected, cfg
+    }
+
+    void drone(Action<Project> cfg) {
+        configureConditionally DRONE.detected, cfg
     }
 
     private void configureConditionally(boolean canConfigure, Action<Project> cfg) {
