@@ -37,8 +37,8 @@ class AppveyorTestReporterPlugin implements Plugin<Project> {
     void apply(Project project) {
         if (System.getenv('APPVEYOR_API_URL')) {
 
-            project.tasks.withType(Test) { Test t ->
-                addReporter(t)
+            project.tasks.findAll { it instanceof Test }.each { Task t ->
+                addReporter((Test) t)
             }
 
             project.tasks.whenTaskAdded { Task t ->
@@ -49,18 +49,32 @@ class AppveyorTestReporterPlugin implements Plugin<Project> {
         }
     }
 
-    static void addReporter(Test test) {
-        test.afterTest { TestDescriptor td, TestResult result ->
+    private void addReporter(Test task) {
+        AppveyorReporterExtension reporterExtension = task.extensions.create('appveyor-test-reporter', AppveyorReporterExtension, task)
 
-            Map<String, String> postable = [:]
+        task.afterTest { TestDescriptor td, TestResult result ->
+            reporterExtension.sendTestResultMessage(td, result)
+        }
+    }
 
+    static class AppveyorReporterExtension {
+        AppveyorReporterExtension(Test task) {
+            testTask = task
+            http = configure {
+                request.uri = System.getenv('APPVEYOR_API_URL')
+                request.contentType = JSON[0]
+            }
+        }
+
+        void sendTestResultMessage(TestDescriptor td, TestResult result) {
+            final Map<String, String> postable = [:]
             try {
-
                 String errorStackTrace
                 if (result.exception) {
                     Writer w = new StringWriter()
                     result.exception.printStackTrace(new PrintWriter(w))
                     errorStackTrace = w.toString()
+                    w.close()
                 } else {
                     errorStackTrace = ''
                 }
@@ -71,29 +85,35 @@ class AppveyorTestReporterPlugin implements Plugin<Project> {
                     fileName            : td.className ?: '(n/a)',
                     outcome             : mapTestResult(result.resultType),
                     durationMilliseconds: "${(result.endTime - result.startTime)}".toString(),
-                    ErrorMessage        : result.exception?.message ?: '',
+                    ErrorMessage        : result.exceptions*.message.join("\n"),
                     ErrorStackTrace     : errorStackTrace,
                     StdOut              : '',
                     StdErr              : ''
                 ])
 
-                HttpBuilder http = configure {
-                    request.uri = System.getenv('APPVEYOR_API_URL')
-                    request.contentType = JSON[0]
-                }
+                post(postable)
 
+            } catch (Throwable t) {
+                testTask.project.logger.error "Could not create message for Appveyor because: ${t.message} (${postable})", t
+            }
+        }
+
+        private void post(final Map<String, String> postable) {
+            try {
                 http.post {
                     request.uri.path = '/api/tests'
                     request.body = postable
                     response.failure {
-                        test.project.logger.warn('Could not post test report to Appveyor')
+                        testTask.project.logger.warn('Could not post test report to Appveyor')
                     }
                 }
-            } catch(java.net.ConnectException e) {
-                test.project.logger.warn "Could not connect to ${System.getenv('APPVEYOR_API_URL')}"
-            } catch (Throwable t) {
-                test.project.logger.error "Could not create message for Appveyor because: ${t.message} (${postable})",  t
+            } catch (java.net.ConnectException e) {
+                testTask.project.logger.warn "Could not connect to ${System.getenv('APPVEYOR_API_URL')}"
             }
+
         }
+
+        private final Test testTask
+        private final HttpBuilder http
     }
 }

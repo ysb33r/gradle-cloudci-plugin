@@ -96,7 +96,7 @@ cloudci {
 [source,groovy]
 ----
 cloudci {
-    any { // <1>
+    any_ci { // <1>
        test {
          jvmArgs '-Xmx:2048m'
        }
@@ -104,6 +104,19 @@ cloudci {
 }
 ----
 <1> Run this configuration if executed under any of the supported CI environments.
+
+.No CI
+[source,groovy]
+----
+cloudci {
+    no_ci { // <1>
+       test {
+         jvmArgs '-Xmx:2048m'
+       }
+    }
+}
+----
+<1> Only run this configuration if none of the supported CI environments are detected.
 
 == Pushing test results to Appveyor's Build Worker API
 

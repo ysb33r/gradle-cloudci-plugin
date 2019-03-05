@@ -4,7 +4,7 @@ plugins {
 }
 
 ext {
-    depSpock = "org.spockframework:spock-core:1.1-groovy-${GroovySystem.version.replaceAll(/\.\d+$/, '')}"
+    depSpock = "org.spockframework:spock-core:1.2-groovy-${GroovySystem.version.replaceAll(/\.\d+$/, '')}"
 }
 
 repositories {

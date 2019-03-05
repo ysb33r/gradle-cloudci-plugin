@@ -5,11 +5,11 @@ plugins {
     id 'org.ysb33r.bintray' version '1.5'
     id 'com.gradle.plugin-publish' version '0.9.7'
     id 'com.github.hierynomus.license' version '0.13.1'
-    id 'org.ysb33r.gradletest' version '1.1'
+    id 'org.ysb33r.gradletest' version '2.0-rc.1'
 }
 
 group = 'org.ysb33r.gradle'
-version = '2.3'
+version = '2.4.1'
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
@@ -27,7 +27,7 @@ repositories {
 }
 
 ext {
-    depSpock = "org.spockframework:spock-core:1.1-groovy-${GroovySystem.version.replaceAll(/\.\d+$/, '')}"
+    depSpock = "org.spockframework:spock-core:1.2-groovy-${GroovySystem.version.replaceAll(/\.\d+$/, '')}"
 }
 
 configurations {
@@ -90,7 +90,8 @@ task environmentTests(type: Test) {
 
     include '**/CloudCiConditionalPluginWithEnvSpec.class'
     include '**/AppveyorTestReporterPluginSpec.class'
-    environment APPVEYOR: 1, TRAVIS: 1, CIRCLECI: 1, 'JENKINS_URL': 1, 'GITLAB_CI': 1
+    environment APPVEYOR: 1, TRAVIS: 1, CIRCLECI: 1, 'JENKINS_URL': 1, 'GITLAB_CI': 1,
+        'bamboo_build_working_directory': 1
     dependsOn testClasses
 }
 
@@ -151,7 +152,9 @@ license {
     strictCheck = true
     ignoreFailures = false
     ext.year = '2015 - 2018'
-    excludes(['**/*.ad', '**/*.asciidoc', '**/*.adoc', '**/*.md', '**/*.properties', '**/*CompatibilitySpec.groovy'])
+    excludes (['**/*.ad', '**/*.asciidoc', '**/*.adoc',
+        '**/*.properties',
+        '**/*.dsl.*Spec.groovy'])
     mapping 'gradle', 'SLASHSTAR_STYLE'
 }
 
@@ -179,9 +182,8 @@ task release {
 
 
 gradleTest {
-    versions '3.5', '4.8.1'
+    versions '3.5', '4.8.1', '5.2.1'
 }
-
 
 cloudci {
     appveyor {
@@ -190,21 +192,9 @@ cloudci {
         }
     }
 
-    travisci {
+    gitlabci {
         test {
-            environment.remove('TRAVIS')
-        }
-    }
-
-    circleci {
-        test {
-            environment.remove('CIRCLECI')
-        }
-    }
-
-    jenkinsci {
-        test {
-            environment.remove('JENKINS_URL')
+            environment.remove('GITLAB_CI')
         }
     }
 }

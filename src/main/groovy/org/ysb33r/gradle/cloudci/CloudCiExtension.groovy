@@ -17,6 +17,8 @@ import groovy.transform.CompileStatic
 import org.gradle.api.Action
 import org.gradle.api.Project
 
+import static org.ysb33r.gradle.cloudci.CiEnvironment.*
+
 /**
  * @author Schalk W. Cronjé
  */
@@ -27,74 +29,90 @@ class CloudCiExtension {
         this.project = p
     }
 
+    void no_ci(@DelegatesTo(Project) Closure cfg) {
+        boolean found = CiEnvironment.values().any { CiEnvironment envVars ->
+            envVars.detected
+        }
+        configureConditionally( !found, cfg )
+    }
+
+    void any_ci(@DelegatesTo(Project) Closure cfg) {
+        boolean found = CiEnvironment.values().any { CiEnvironment envVars ->
+            envVars.detected
+        }
+        configureConditionally( found, cfg )
+    }
+
+    @Deprecated
     void any(@DelegatesTo(Project) Closure cfg) {
-        configureConditionally CiEnvironments.Service.values(), cfg
+        any_ci cfg
     }
 
     void appveyor(@DelegatesTo(Project) Closure cfg) {
-        configureConditionally 'appveyor', cfg
+        configureConditionally APPVEYOR.detected, cfg
     }
 
     void circleci(@DelegatesTo(Project) Closure cfg) {
-        configureConditionally 'circleci', cfg
+        configureConditionally CIRCLE_CI.detected, cfg
     }
 
     void travisci(@DelegatesTo(Project) Closure cfg) {
-        configureConditionally 'travisci', cfg
+        configureConditionally TRAVIS_CI.detected, cfg
     }
 
     void jenkinsci(@DelegatesTo(Project) Closure cfg) {
-        configureConditionally 'jenkinsci', cfg
+        configureConditionally JENKINS_CI.detected, cfg
     }
 
     void gitlabci(@DelegatesTo(Project) Closure cfg) {
-        configureConditionally 'gitlabci', cfg
+        configureConditionally GITLAB_CI.detected, cfg
     }
 
+    void bamboo(@DelegatesTo(Project) Closure cfg) {
+        configureConditionally BAMBOO.detected, cfg
+    }
+
+    void no_ci(Action<Project> cfg) {
+        boolean found = CiEnvironment.values().any { CiEnvironment envVars ->
+            envVars.detected
+        }
+        configureConditionally( !found, cfg )
+    }
+
+    void any_ci(Action<Project> cfg) {
+        boolean found = CiEnvironment.values().any { CiEnvironment envVars ->
+            envVars.detected
+        }
+        configureConditionally( found, cfg )
+    }
+
+    @Deprecated
     void any(Action<Project> cfg) {
-        configureConditionally CiEnvironments.Service.values(), cfg
+        any_ci(cfg)
     }
 
     void appveyor(Action<Project> cfg) {
-        configureConditionally 'appveyor', cfg
+        configureConditionally APPVEYOR.detected, cfg
     }
 
     void circleci(Action<Project> cfg) {
-        configureConditionally 'circleci', cfg
+        configureConditionally CIRCLE_CI.detected, cfg
     }
 
     void travisci(Action<Project> cfg) {
-        configureConditionally 'travisci', cfg
+        configureConditionally TRAVIS_CI.detected, cfg
     }
 
     void jenkinsci(Action<Project> cfg) {
-        configureConditionally 'jenkinsci', cfg
+        configureConditionally JENKINS_CI.detected, cfg
     }
 
     void gitlabci(Action<Project> cfg) {
-        configureConditionally 'gitlabci', cfg
+        configureConditionally GITLAB_CI.detected, cfg
     }
 
-    private void configureConditionally(final String envVar, Action<Project> cfg) {
-        configureConditionally System.getenv(CiEnvironments.Service[envVar]) != null, cfg
-    }
-
-    private void configureConditionally(final Iterable<String> envVars, Action<Project> cfg) {
-        configureConditionally(
-            envVars.any { System.getenv(it) != null },
-            cfg
-        )
-    }
-
-    private void configureConditionally(final String envVar, Closure cfg) {
-        configureConditionally System.getenv(CiEnvironments.Service[envVar]) != null, cfg
-    }
-
-    private void configureConditionally(final Iterable<String> envVars, Closure cfg) {
-        configureConditionally(
-            envVars.any { System.getenv(it) != null },
-            cfg
-        )
+    void bamboo(Action<Project> cfg) {
+        configureConditionally BAMBOO.detected, cfg
     }
 
     private void configureConditionally(boolean canConfigure, Action<Project> cfg) {

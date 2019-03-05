@@ -14,11 +14,8 @@
 package org.ysb33r.gradle.cloudci
 
 import org.gradle.testfixtures.ProjectBuilder
-import spock.lang.IgnoreIf
 import spock.lang.Specification
-import spock.lang.Stepwise
 import spock.lang.Unroll
-
 
 class CloudCiConditionalPluginWithEnvSpec extends Specification {
 
@@ -28,24 +25,33 @@ class CloudCiConditionalPluginWithEnvSpec extends Specification {
 
         when:
         def project = ProjectBuilder.builder().build()
-        project.apply plugin : 'org.ysb33r.cloudci'
+        project.apply plugin: 'org.ysb33r.cloudci'
         project.cloudci."${extObj}" {
             ext {
                 foo = 'bar'
             }
         }
+
+        project.cloudci.any_ci {
+            ext {
+                foo2 = 'bar2'
+            }
+        }
+
         project.evaluate()
 
         then:
         project.ext.foo == 'bar'
+        project.ext.foo2 == 'bar2'
 
         where:
-        name        | envVar        | extObj
-        'appveyor'  | 'APPVEYOR'    | 'appveyor'
-        'travis-ci' | 'TRAVIS'      | 'travisci'
-        'circle-ci' | 'CIRCLECI'    | 'circleci'
-        'jenkins'   | 'JENKINS_URL' | 'jenkinsci'
-        'gitlab'    | 'GITLAB_CI'   | 'gitlabci'
+        name        | envVar                           | extObj
+        'appveyor'  | 'APPVEYOR'                       | 'appveyor'
+        'travis-ci' | 'TRAVIS'                         | 'travisci'
+        'circle-ci' | 'CIRCLECI'                       | 'circleci'
+        'jenkins'   | 'JENKINS_URL'                    | 'jenkinsci'
+        'gitlab'    | 'GITLAB_CI'                      | 'gitlabci'
+        'bamboo'    | 'bamboo_build_working_directory' | 'bamboo'
     }
 
 }
