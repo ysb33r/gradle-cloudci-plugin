@@ -20,13 +20,33 @@ import groovy.transform.CompileStatic
  * @since 2.3
  */
 @CompileStatic
-class CiEnvironments {
-    public static final Map<String,String> SERVICE = [
-        appveyor  : 'APPVEYOR',
-        circleci  : 'CIRCLECI',
-        jenkinsci : 'JENKINS_URL',
-        travisci  : 'TRAVIS',
-        gitlabci  : 'GITLAB_CI',
-        bamboo    : 'bamboo.build.working.directory'
-    ]
+enum CiEnvironment {
+    APPVEYOR('appveyor', 'APPVEYOR'),
+    CIRCLE_CI('circleci', 'CIRCLECI'),
+    JENKINS_CI('jenkinsci', 'JENKINS_URL'),
+    TRAVIS_CI('travisci', 'TRAVIS'),
+    GITLAB_CI('gitlabci', 'GITLAB_CI'),
+    BAMBOO('bamboo', 'bamboo_build_working_directory', 'bamboo.build.working.directory')
+
+    final List<String> envVars
+    final String id
+
+    boolean getDetected() {
+        envVars.any { String var ->
+            System.getenv(var) != null
+        }
+    }
+
+    @Override
+    String toString() {
+        id
+    }
+
+    private CiEnvironment(String id, String... envVars) {
+        this.id = id
+        this.envVars = envVars as List
+        if (this.envVars.empty) {
+            throw new IllegalStateException('Cannot have a CiEnvironment with no environmental variables')
+        }
+    }
 }

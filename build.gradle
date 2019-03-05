@@ -9,7 +9,7 @@ plugins {
 }
 
 group = 'org.ysb33r.gradle'
-version = '2.4'
+version = '2.4.1'
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
