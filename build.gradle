@@ -5,11 +5,11 @@ plugins {
     id 'org.ysb33r.bintray' version '1.5'
     id 'com.gradle.plugin-publish' version '0.9.7'
     id 'com.github.hierynomus.license' version '0.13.1'
-    id 'org.ysb33r.gradletest' version '2.0-rc.1'
+    id 'org.ysb33r.gradletest' version '2.0-rc.3'
 }
 
 group = 'org.ysb33r.gradle'
-version = '2.4.1'
+version = '2.5'
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
@@ -50,7 +50,7 @@ apply plugin: new GroovyScriptEngine(
         collect { file(it).absolutePath }
         .toArray(new String[2]),
     project.class.classLoader
-).loadScriptByName('org/ysb33r/gradle/cloudci/CloudCiConditionalPlugin.groovy')
+).loadScriptByName('org/ysb33r/gradle/cloudci/CiConditionalPlugin.groovy')
 
 groovydoc {
     windowTitle 'Cloud CI Conditional Plugin for Gradle'
@@ -79,7 +79,7 @@ jar {
 }
 
 test {
-    exclude '**/CloudCiConditionalPluginWithEnvSpec.class'
+    exclude '**/CiConditionalPluginWithEnvSpec.class'
     exclude '**/AppveyorTestReporterPluginSpec.class'
 }
 
@@ -88,7 +88,7 @@ task environmentTests(type: Test) {
     classpath = sourceSets.test.runtimeClasspath
     reports.html.destination = file("${reporting.baseDir}/environmentTests")
 
-    include '**/CloudCiConditionalPluginWithEnvSpec.class'
+    include '**/CiConditionalPluginWithEnvSpec.class'
     include '**/AppveyorTestReporterPluginSpec.class'
     environment APPVEYOR: 1, TRAVIS: 1, CIRCLECI: 1, 'JENKINS_URL': 1, 'GITLAB_CI': 1,
         'bamboo_build_working_directory': 1
@@ -185,7 +185,7 @@ gradleTest {
     versions '3.5', '4.8.1', '5.2.1'
 }
 
-cloudci {
+ci {
     appveyor {
         test {
             environment.remove('APPVEYOR')

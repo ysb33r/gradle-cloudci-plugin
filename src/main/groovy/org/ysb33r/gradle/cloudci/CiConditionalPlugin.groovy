@@ -20,9 +20,10 @@ import org.gradle.api.Project
 /**
  */
 @CompileStatic
-class CloudCiConditionalPlugin implements Plugin<Project> {
+class CiConditionalPlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
         project.extensions.create('cloudci',CloudCiExtension,project)
+        project.extensions.create('ci',CiExtension,project)
     }
 }

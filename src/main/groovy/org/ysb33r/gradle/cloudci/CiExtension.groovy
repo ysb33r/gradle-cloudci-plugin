@@ -23,9 +23,9 @@ import static org.ysb33r.gradle.cloudci.CiEnvironment.*
  * @author Schalk W. Cronjé
  */
 @CompileStatic
-class CloudCiExtension {
+class CiExtension {
 
-    CloudCiExtension(Project p) {
+    CiExtension(Project p) {
         this.project = p
     }
 
@@ -43,38 +43,31 @@ class CloudCiExtension {
         configureConditionally( found, cfg )
     }
 
-    @Deprecated
-    void any(@DelegatesTo(Project) Closure cfg) {
-        project.logger.warn('Use of `cloudci.any` is deprecated. Use `ci.any_ci` instead.')
-        any_ci cfg
-    }
-
     void appveyor(@DelegatesTo(Project) Closure cfg) {
-        configureConditionally APPVEYOR, cfg
+        configureConditionally APPVEYOR.detected, cfg
     }
 
     void circleci(@DelegatesTo(Project) Closure cfg) {
-        configureConditionally CIRCLE_CI, cfg
+        configureConditionally CIRCLE_CI.detected, cfg
     }
 
     void travisci(@DelegatesTo(Project) Closure cfg) {
-        configureConditionally TRAVIS_CI, cfg
+        configureConditionally TRAVIS_CI.detected, cfg
     }
 
     void jenkinsci(@DelegatesTo(Project) Closure cfg) {
-        configureConditionally JENKINS_CI, cfg
+        configureConditionally JENKINS_CI.detected, cfg
     }
 
     void gitlabci(@DelegatesTo(Project) Closure cfg) {
-        configureConditionally GITLAB_CI, cfg
+        configureConditionally GITLAB_CI.detected, cfg
     }
 
     void bamboo(@DelegatesTo(Project) Closure cfg) {
-        configureConditionally BAMBOO, cfg
+        configureConditionally BAMBOO.detected, cfg
     }
 
     void no_ci(Action<Project> cfg) {
-        deprecationMsg('no_ci')
         boolean found = CiEnvironment.values().any { CiEnvironment envVars ->
             envVars.detected
         }
@@ -82,7 +75,6 @@ class CloudCiExtension {
     }
 
     void any_ci(Action<Project> cfg) {
-        deprecationMsg('any_ci')
         boolean found = CiEnvironment.values().any { CiEnvironment envVars ->
             envVars.detected
         }
@@ -91,45 +83,31 @@ class CloudCiExtension {
 
     @Deprecated
     void any(Action<Project> cfg) {
-        project.logger.warn('Use of `cloudci.any` is deprecated. Use `ci.any_ci` instead.')
-        boolean found = CiEnvironment.values().any { CiEnvironment envVars ->
-            envVars.detected
-        }
-        configureConditionally( found, cfg )
+        any_ci(cfg)
     }
 
     void appveyor(Action<Project> cfg) {
-        configureConditionally APPVEYOR, cfg
+        configureConditionally APPVEYOR.detected, cfg
     }
 
     void circleci(Action<Project> cfg) {
-        configureConditionally CIRCLE_CI, cfg
+        configureConditionally CIRCLE_CI.detected, cfg
     }
 
     void travisci(Action<Project> cfg) {
-        configureConditionally TRAVIS_CI, cfg
+        configureConditionally TRAVIS_CI.detected, cfg
     }
 
     void jenkinsci(Action<Project> cfg) {
-        configureConditionally JENKINS_CI, cfg
+        configureConditionally JENKINS_CI.detected, cfg
     }
 
     void gitlabci(Action<Project> cfg) {
-        configureConditionally GITLAB_CI, cfg
+        configureConditionally GITLAB_CI.detected, cfg
     }
 
     void bamboo(Action<Project> cfg) {
-        configureConditionally BAMBOO, cfg
-    }
-
-    private void configureConditionally(CiEnvironment env, Action<Project> cfg) {
-        deprecationMsg(env.id)
-        configureConditionally(env.detected,cfg)
-    }
-
-    private void configureConditionally(CiEnvironment env, Closure cfg) {
-        deprecationMsg(env.id)
-        configureConditionally(env.detected,cfg)
+        configureConditionally BAMBOO.detected, cfg
     }
 
     private void configureConditionally(boolean canConfigure, Action<Project> cfg) {
@@ -144,11 +122,6 @@ class CloudCiExtension {
             exe.delegate = project
             exe.call()
         }
-    }
-
-    private void deprecationMsg(final String part) {
-        project.logger.warn("Use of `cloudci.${part}` is deprecated and will be removed in a future version. Use `ci.${part}` instead.")
-
     }
 
     private final Project project

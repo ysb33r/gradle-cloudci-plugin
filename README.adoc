@@ -43,7 +43,7 @@ cloudci {
 .Travis CI
 [source,groovy]
 ----
-cloudci {
+ci {
     travisci { // <1>
        test {
          jvmArgs '-Xmx:2048m'
@@ -56,7 +56,7 @@ cloudci {
 .Circle CI
 [source,groovy]
 ----
-cloudci {
+ci {
     circleci { // <1>
        test {
          jvmArgs '-Xmx:2048m'
@@ -69,7 +69,7 @@ cloudci {
 .Jenkins CI
 [source,groovy]
 ----
-cloudci {
+ci {
     jenkinsci { // <1>
        test {
          jvmArgs '-Xmx:2048m'
@@ -82,7 +82,7 @@ cloudci {
 .GitLab Runners
 [source,groovy]
 ----
-cloudci {
+ci {
     gitlabci { // <1>
        test {
          jvmArgs '-Xmx:2048m'
@@ -95,7 +95,7 @@ cloudci {
 .Any supported CI
 [source,groovy]
 ----
-cloudci {
+ci {
     any_ci { // <1>
        test {
          jvmArgs '-Xmx:2048m'
@@ -103,12 +103,12 @@ cloudci {
     }
 }
 ----
-<1> Run this configuration if executed under any of the supported CI environments.
+<1> Run this configuration if executed under any of the supported CI environments. Use `any_ci`, as the use of `any` from previous releases is deprecated).
 
 .No CI
 [source,groovy]
 ----
-cloudci {
+ci {
     no_ci { // <1>
        test {
          jvmArgs '-Xmx:2048m'
