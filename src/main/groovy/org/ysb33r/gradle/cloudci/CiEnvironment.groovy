@@ -27,6 +27,7 @@ enum CiEnvironment {
     CODESHIP( 'codeship', 'CI_NAME'),
     DRONE('drone', 'DRONE'),
     GITLAB_CI('gitlabci', 'GITLAB_CI'),
+    GO_CD('gocd', 'GO_SERVER_URL'),
     JENKINS_CI('jenkinsci', 'JENKINS_URL'),
     TRAVIS_CI('travisci', 'TRAVIS')
 

@@ -105,6 +105,14 @@ class CiExtension {
         configureConditionally GITLAB_CI, cfg
     }
 
+    void gocd(@DelegatesTo(Project) Closure cfg) {
+        configureConditionally GO_CD, cfg
+    }
+
+    void gocd(Action<Project> cfg) {
+        configureConditionally GO_CD, cfg
+    }
+
     void jenkinsci(@DelegatesTo(Project) Closure cfg) {
         configureConditionally JENKINS_CI, cfg
     }
