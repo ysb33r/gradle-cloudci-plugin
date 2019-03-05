@@ -64,7 +64,21 @@ ci {
     }
 }
 ----
-<1> Only run this configuration when on https://circleci.com[Circle CI]
+<1> Only run this configuration when on https://circleci.com[Circle CI].
+
+.Codeship
+[source,groovy]
+----
+ci {
+    codeship { // <1>
+       test {
+         jvmArgs '-Xmx:2048m'
+       }
+    }
+}
+----
+<1> Only run this configuration when on https://codeship.com/[Codeship].
+
 
 .Drone
 [source,groovy]

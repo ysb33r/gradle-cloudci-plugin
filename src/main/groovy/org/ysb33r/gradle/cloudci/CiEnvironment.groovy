@@ -24,6 +24,7 @@ enum CiEnvironment {
     APPVEYOR('appveyor', 'APPVEYOR'),
     BAMBOO('bamboo', 'bamboo_build_working_directory', 'bamboo.build.working.directory'),
     CIRCLE_CI('circleci', 'CIRCLECI'),
+    CODESHIP( 'codeship', 'CI_NAME'),
     DRONE('drone', 'DRONE'),
     GITLAB_CI('gitlabci', 'GITLAB_CI'),
     JENKINS_CI('jenkinsci', 'JENKINS_URL'),
