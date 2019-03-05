@@ -121,6 +121,14 @@ class CiExtension {
         configureConditionally JENKINS_CI, cfg
     }
 
+    void teamcity(@DelegatesTo(Project) Closure cfg) {
+        configureConditionally TEAMCITY, cfg
+    }
+
+    void teamcity(Action<Project> cfg) {
+        configureConditionally TEAMCITY, cfg
+    }
+
     void travisci(@DelegatesTo(Project) Closure cfg) {
         configureConditionally TRAVIS_CI, cfg
     }

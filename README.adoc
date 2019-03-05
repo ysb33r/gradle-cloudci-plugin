@@ -131,6 +131,19 @@ ci {
 ----
 <1> Only run this configuration when on a https://jenkins.io/index.html[Jenkins CI] server.
 
+.Teamcity
+[source,groovy]
+----
+ci {
+    travisci { // <1>
+       test {
+         jvmArgs '-Xmx:2048m'
+       }
+    }
+}
+----
+<1> Only run this configuration when on https://www.jetbrains.com/teamcity[Jetbrains Teamcity]
+
 .Travis CI
 [source,groovy]
 ----

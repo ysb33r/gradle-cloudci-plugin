@@ -29,6 +29,7 @@ enum CiEnvironment {
     GITLAB_CI('gitlabci', 'GITLAB_CI'),
     GO_CD('gocd', 'GO_SERVER_URL'),
     JENKINS_CI('jenkinsci', 'JENKINS_URL'),
+    TEAMCITY('teamcity','TEAMCITY_BUILD_PROPERTIES_FILE'),
     TRAVIS_CI('travisci', 'TRAVIS')
 
     final List<String> envVars
