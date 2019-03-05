@@ -1,6 +1,6 @@
 /*
  * ============================================================================
- * (C) Copyright Schalk W. Cronje 2015 - 2018
+ * (C) Copyright Schalk W. Cronje 2015 - 2019
  *
  * This software is licensed under the Apache License 2.0
  * See http://www.apache.org/licenses/LICENSE-2.0 for license details
@@ -23,12 +23,14 @@ import static org.ysb33r.gradle.cloudci.CiEnvironment.*
  * @author Schalk W. Cronjé
  */
 @CompileStatic
+@Deprecated
 class CloudCiExtension {
 
     CloudCiExtension(Project p) {
         this.project = p
     }
 
+    @Deprecated
     void no_ci(@DelegatesTo(Project) Closure cfg) {
         boolean found = CiEnvironment.values().any { CiEnvironment envVars ->
             envVars.detected
@@ -36,6 +38,7 @@ class CloudCiExtension {
         configureConditionally( !found, cfg )
     }
 
+    @Deprecated
     void any_ci(@DelegatesTo(Project) Closure cfg) {
         boolean found = CiEnvironment.values().any { CiEnvironment envVars ->
             envVars.detected
@@ -49,30 +52,37 @@ class CloudCiExtension {
         any_ci cfg
     }
 
+    @Deprecated
     void appveyor(@DelegatesTo(Project) Closure cfg) {
         configureConditionally APPVEYOR, cfg
     }
 
+    @Deprecated
     void circleci(@DelegatesTo(Project) Closure cfg) {
         configureConditionally CIRCLE_CI, cfg
     }
 
+    @Deprecated
     void travisci(@DelegatesTo(Project) Closure cfg) {
         configureConditionally TRAVIS_CI, cfg
     }
 
+    @Deprecated
     void jenkinsci(@DelegatesTo(Project) Closure cfg) {
         configureConditionally JENKINS_CI, cfg
     }
 
+    @Deprecated
     void gitlabci(@DelegatesTo(Project) Closure cfg) {
         configureConditionally GITLAB_CI, cfg
     }
 
+    @Deprecated
     void bamboo(@DelegatesTo(Project) Closure cfg) {
         configureConditionally BAMBOO, cfg
     }
 
+    @Deprecated
     void no_ci(Action<Project> cfg) {
         deprecationMsg('no_ci')
         boolean found = CiEnvironment.values().any { CiEnvironment envVars ->
@@ -81,6 +91,7 @@ class CloudCiExtension {
         configureConditionally( !found, cfg )
     }
 
+    @Deprecated
     void any_ci(Action<Project> cfg) {
         deprecationMsg('any_ci')
         boolean found = CiEnvironment.values().any { CiEnvironment envVars ->
@@ -98,26 +109,32 @@ class CloudCiExtension {
         configureConditionally( found, cfg )
     }
 
+    @Deprecated
     void appveyor(Action<Project> cfg) {
         configureConditionally APPVEYOR, cfg
     }
 
+    @Deprecated
     void circleci(Action<Project> cfg) {
         configureConditionally CIRCLE_CI, cfg
     }
 
+    @Deprecated
     void travisci(Action<Project> cfg) {
         configureConditionally TRAVIS_CI, cfg
     }
 
+    @Deprecated
     void jenkinsci(Action<Project> cfg) {
         configureConditionally JENKINS_CI, cfg
     }
 
+    @Deprecated
     void gitlabci(Action<Project> cfg) {
         configureConditionally GITLAB_CI, cfg
     }
 
+    @Deprecated
     void bamboo(Action<Project> cfg) {
         configureConditionally BAMBOO, cfg
     }
