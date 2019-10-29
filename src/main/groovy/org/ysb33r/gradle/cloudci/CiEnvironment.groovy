@@ -22,11 +22,16 @@ import groovy.transform.CompileStatic
 @CompileStatic
 enum CiEnvironment {
     APPVEYOR('appveyor', 'APPVEYOR'),
+    BAMBOO('bamboo', 'bamboo_build_working_directory', 'bamboo.build.working.directory'),
     CIRCLE_CI('circleci', 'CIRCLECI'),
-    JENKINS_CI('jenkinsci', 'JENKINS_URL'),
-    TRAVIS_CI('travisci', 'TRAVIS'),
+    CODEBUILD( 'codebuild','CODEBUILD_BUILD_ARN'),
+    CODESHIP( 'codeship', 'CI_NAME'),
+    DRONE('drone', 'DRONE'),
     GITLAB_CI('gitlabci', 'GITLAB_CI'),
-    BAMBOO('bamboo', 'bamboo_build_working_directory', 'bamboo.build.working.directory')
+    GO_CD('gocd', 'GO_SERVER_URL'),
+    JENKINS_CI('jenkinsci', 'JENKINS_URL'),
+    TEAMCITY('teamcity','TEAMCITY_BUILD_PROPERTIES_FILE'),
+    TRAVIS_CI('travisci', 'TRAVIS')
 
     final List<String> envVars
     final String id

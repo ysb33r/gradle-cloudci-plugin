@@ -33,81 +33,124 @@ class CiExtension {
         boolean found = CiEnvironment.values().any { CiEnvironment envVars ->
             envVars.detected
         }
-        configureConditionally( !found, cfg )
-    }
-
-    void any_ci(@DelegatesTo(Project) Closure cfg) {
-        boolean found = CiEnvironment.values().any { CiEnvironment envVars ->
-            envVars.detected
-        }
-        configureConditionally( found, cfg )
-    }
-
-    void appveyor(@DelegatesTo(Project) Closure cfg) {
-        configureConditionally APPVEYOR.detected, cfg
-    }
-
-    void circleci(@DelegatesTo(Project) Closure cfg) {
-        configureConditionally CIRCLE_CI.detected, cfg
-    }
-
-    void travisci(@DelegatesTo(Project) Closure cfg) {
-        configureConditionally TRAVIS_CI.detected, cfg
-    }
-
-    void jenkinsci(@DelegatesTo(Project) Closure cfg) {
-        configureConditionally JENKINS_CI.detected, cfg
-    }
-
-    void gitlabci(@DelegatesTo(Project) Closure cfg) {
-        configureConditionally GITLAB_CI.detected, cfg
-    }
-
-    void bamboo(@DelegatesTo(Project) Closure cfg) {
-        configureConditionally BAMBOO.detected, cfg
+        configureConditionally(!found, cfg)
     }
 
     void no_ci(Action<Project> cfg) {
         boolean found = CiEnvironment.values().any { CiEnvironment envVars ->
             envVars.detected
         }
-        configureConditionally( !found, cfg )
+        configureConditionally(!found, cfg)
+    }
+
+    void any_ci(@DelegatesTo(Project) Closure cfg) {
+        boolean found = CiEnvironment.values().any { CiEnvironment envVars ->
+            envVars.detected
+        }
+        configureConditionally(found, cfg)
     }
 
     void any_ci(Action<Project> cfg) {
         boolean found = CiEnvironment.values().any { CiEnvironment envVars ->
             envVars.detected
         }
-        configureConditionally( found, cfg )
+        configureConditionally(found, cfg)
     }
 
-    @Deprecated
-    void any(Action<Project> cfg) {
-        any_ci(cfg)
+    void appveyor(@DelegatesTo(Project) Closure cfg) {
+        configureConditionally APPVEYOR, cfg
     }
 
     void appveyor(Action<Project> cfg) {
-        configureConditionally APPVEYOR.detected, cfg
+        configureConditionally APPVEYOR, cfg
     }
 
-    void circleci(Action<Project> cfg) {
-        configureConditionally CIRCLE_CI.detected, cfg
-    }
-
-    void travisci(Action<Project> cfg) {
-        configureConditionally TRAVIS_CI.detected, cfg
-    }
-
-    void jenkinsci(Action<Project> cfg) {
-        configureConditionally JENKINS_CI.detected, cfg
-    }
-
-    void gitlabci(Action<Project> cfg) {
-        configureConditionally GITLAB_CI.detected, cfg
+    void bamboo(@DelegatesTo(Project) Closure cfg) {
+        configureConditionally BAMBOO, cfg
     }
 
     void bamboo(Action<Project> cfg) {
-        configureConditionally BAMBOO.detected, cfg
+        configureConditionally BAMBOO, cfg
+    }
+
+    void circleci(@DelegatesTo(Project) Closure cfg) {
+        configureConditionally CIRCLE_CI, cfg
+    }
+
+    void circleci(Action<Project> cfg) {
+        configureConditionally CIRCLE_CI, cfg
+    }
+
+    void codebuild(@DelegatesTo(Project) Closure cfg) {
+        configureConditionally CODEBUILD, cfg
+    }
+
+    void codebuild(Action<Project> cfg) {
+        configureConditionally CODEBUILD, cfg
+    }
+
+    void codeship(@DelegatesTo(Project) Closure cfg) {
+        configureConditionally CODESHIP, cfg
+    }
+
+    void codeship(Action<Project> cfg) {
+        configureConditionally CODESHIP, cfg
+    }
+
+    void drone(@DelegatesTo(Project) Closure cfg) {
+        configureConditionally DRONE, cfg
+    }
+
+    void drone(Action<Project> cfg) {
+        configureConditionally DRONE, cfg
+    }
+
+    void gitlabci(@DelegatesTo(Project) Closure cfg) {
+        configureConditionally GITLAB_CI, cfg
+    }
+
+    void gitlabci(Action<Project> cfg) {
+        configureConditionally GITLAB_CI, cfg
+    }
+
+    void gocd(@DelegatesTo(Project) Closure cfg) {
+        configureConditionally GO_CD, cfg
+    }
+
+    void gocd(Action<Project> cfg) {
+        configureConditionally GO_CD, cfg
+    }
+
+    void jenkinsci(@DelegatesTo(Project) Closure cfg) {
+        configureConditionally JENKINS_CI, cfg
+    }
+
+    void jenkinsci(Action<Project> cfg) {
+        configureConditionally JENKINS_CI, cfg
+    }
+
+    void teamcity(@DelegatesTo(Project) Closure cfg) {
+        configureConditionally TEAMCITY, cfg
+    }
+
+    void teamcity(Action<Project> cfg) {
+        configureConditionally TEAMCITY, cfg
+    }
+
+    void travisci(@DelegatesTo(Project) Closure cfg) {
+        configureConditionally TRAVIS_CI, cfg
+    }
+
+    void travisci(Action<Project> cfg) {
+        configureConditionally TRAVIS_CI, cfg
+    }
+
+    private void configureConditionally(CiEnvironment env, Action<Project> cfg) {
+        configureConditionally(env.detected, cfg)
+    }
+
+    private void configureConditionally(CiEnvironment env, Closure cfg) {
+        configureConditionally(env.detected, cfg)
     }
 
     private void configureConditionally(boolean canConfigure, Action<Project> cfg) {

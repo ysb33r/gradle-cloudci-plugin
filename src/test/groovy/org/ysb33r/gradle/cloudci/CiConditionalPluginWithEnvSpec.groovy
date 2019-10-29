@@ -20,19 +20,19 @@ import spock.lang.Unroll
 class CiConditionalPluginWithEnvSpec extends Specification {
 
     @Unroll
-    def 'Testing #name run with environment'() {
-        assert System.getenv()[envVar]
+    def 'Testing #env.id run with environment'() {
+        assert System.getenv()[env.envVars.first()]
 
         when:
         def project = ProjectBuilder.builder().build()
         project.apply plugin: 'org.ysb33r.cloudci'
-        project.cloudci."${extObj}" {
+        project.ci."${env.id}" {
             ext {
                 foo = 'bar'
             }
         }
 
-        project.cloudci.any_ci {
+        project.ci.any_ci {
             ext {
                 foo2 = 'bar2'
             }
@@ -45,13 +45,7 @@ class CiConditionalPluginWithEnvSpec extends Specification {
         project.ext.foo2 == 'bar2'
 
         where:
-        name        | envVar                           | extObj
-        'appveyor'  | 'APPVEYOR'                       | 'appveyor'
-        'travis-ci' | 'TRAVIS'                         | 'travisci'
-        'circle-ci' | 'CIRCLECI'                       | 'circleci'
-        'jenkins'   | 'JENKINS_URL'                    | 'jenkinsci'
-        'gitlab'    | 'GITLAB_CI'                      | 'gitlabci'
-        'bamboo'    | 'bamboo_build_working_directory' | 'bamboo'
+        env << CiEnvironment.values()
     }
 
 }

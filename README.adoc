@@ -24,12 +24,13 @@ Now you can have a slicker DSL to do the same for a variety of CI products.
 See https://plugins.gradle.org/plugin/org.ysb33r.cloudci for up to date information
 on applying this plugin.
 
-== Configuration
+== Conditional Configuration
 
-.Appveyor
+=== Appveyor
+
 [source,groovy]
 ----
-cloudci {
+ci {
     appveyor { // <1>
        test {
          jvmArgs '-Xmx:2048m' // <2>
@@ -38,22 +39,39 @@ cloudci {
 }
 ----
 <1> Only run this configuration when on https://ci.appveyor.com[AppVeyor]
-<2> By example you can set the JVM Args for tests when on Appveyor
+<2> By example you can set the JVM Args for tests when on Appveyor.
 
-.Travis CI
+=== Amazon CodeBuild
+
 [source,groovy]
 ----
 ci {
-    travisci { // <1>
+    codebuild { // <1>
+       test {
+         jvmArgs '-Xmx:2048m' // <2>
+       }
+    }
+}
+----
+<1> Only run this configuration when on https://docs.aws.amazon.com/codebuild/latest/userguide/welcome.html[AppVeyor]
+<2> By example you can set the JVM Args for tests when building on Amazon CodeBuild.
+
+=== Bamboo
+
+[source,groovy]
+----
+ci {
+    bamboo { // <1>
        test {
          jvmArgs '-Xmx:2048m'
        }
     }
 }
 ----
-<1> Only run this configuration when on https://travis-ci.org[Travis CI]
+<1> Only use this configuration if an https://www.atlassian.com/software/bamboo[Atlassian Bamboo] agent is detected.
 
-.Circle CI
+=== Circle CI
+
 [source,groovy]
 ----
 ci {
@@ -64,9 +82,66 @@ ci {
     }
 }
 ----
-<1> Only run this configuration when on https://circleci.com[Circle CI]
+<1> Only run this configuration when on https://circleci.com[Circle CI].
 
-.Jenkins CI
+=== Codeship
+
+[source,groovy]
+----
+ci {
+    codeship { // <1>
+       test {
+         jvmArgs '-Xmx:2048m'
+       }
+    }
+}
+----
+<1> Only run this configuration when on https://codeship.com/[Codeship].
+
+=== Drone
+
+[source,groovy]
+----
+ci {
+    drone { // <1>
+       test {
+         jvmArgs '-Xmx:2048m'
+       }
+    }
+}
+----
+<1> Only use this configuration if a https://drone.io[Drone agent] is detected.
+
+=== GitLab Runners
+
+[source,groovy]
+----
+ci {
+    gitlabci { // <1>
+       test {
+         jvmArgs '-Xmx:2048m'
+       }
+    }
+}
+----
+<1> Only use this configuration if a https://gitlab.com[GitLab runner] is detected.
+
+=== Go CD
+
+[source,groovy]
+----
+ci {
+    gocd { // <1>
+       test {
+         jvmArgs '-Xmx:2048m'
+       }
+    }
+}
+----
+<1> Only run this configuration when on https://www.gocd.org/[Go CD].
+
+=== Jenkins CI
+
 [source,groovy]
 ----
 ci {
@@ -79,18 +154,33 @@ ci {
 ----
 <1> Only run this configuration when on a https://jenkins.io/index.html[Jenkins CI] server.
 
-.GitLab Runners
+=== Teamcity
+
 [source,groovy]
 ----
 ci {
-    gitlabci { // <1>
+    travisci { // <1>
        test {
          jvmArgs '-Xmx:2048m'
        }
     }
 }
 ----
-<1> Only use this configuration if a GitLab runner is detected.
+<1> Only run this configuration when on https://www.jetbrains.com/teamcity[Jetbrains Teamcity]
+
+=== Travis CI
+
+[source,groovy]
+----
+ci {
+    travisci { // <1>
+       test {
+         jvmArgs '-Xmx:2048m'
+       }
+    }
+}
+----
+<1> Only run this configuration when on https://travis-ci.org[Travis CI]
 
 .Any supported CI
 [source,groovy]
@@ -131,6 +221,6 @@ plugins {
 <1> See https://plugins.gradle.org/plugin/org.ysb33r.cloudci.appveyor.testreporter for up to date information
     on applying this plugin.
 
-Now when run run your tests the results will be posted when your build runs on Appveyor.
+Now when you run your tests the results will be posted when your build runs on Appveyor.
 
 Currently only the `Test` task type is supported, which will cover most cases for JVM projects.
