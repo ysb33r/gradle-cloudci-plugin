@@ -81,6 +81,14 @@ class CiExtension {
         configureConditionally CIRCLE_CI, cfg
     }
 
+    void codebuild(@DelegatesTo(Project) Closure cfg) {
+        configureConditionally CODEBUILD, cfg
+    }
+
+    void codebuild(Action<Project> cfg) {
+        configureConditionally CODEBUILD, cfg
+    }
+
     void codeship(@DelegatesTo(Project) Closure cfg) {
         configureConditionally CODESHIP, cfg
     }

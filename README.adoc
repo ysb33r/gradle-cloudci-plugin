@@ -30,7 +30,7 @@ on applying this plugin.
 
 [source,groovy]
 ----
-cloudci {
+ci {
     appveyor { // <1>
        test {
          jvmArgs '-Xmx:2048m' // <2>
@@ -39,7 +39,22 @@ cloudci {
 }
 ----
 <1> Only run this configuration when on https://ci.appveyor.com[AppVeyor]
-<2> By example you can set the JVM Args for tests when on Appveyor
+<2> By example you can set the JVM Args for tests when on Appveyor.
+
+=== Amazon CodeBuild
+
+[source,groovy]
+----
+ci {
+    codebuild { // <1>
+       test {
+         jvmArgs '-Xmx:2048m' // <2>
+       }
+    }
+}
+----
+<1> Only run this configuration when on https://docs.aws.amazon.com/codebuild/latest/userguide/welcome.html[AppVeyor]
+<2> By example you can set the JVM Args for tests when building on Amazon CodeBuild.
 
 === Bamboo
 
