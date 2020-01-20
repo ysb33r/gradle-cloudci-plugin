@@ -112,6 +112,20 @@ ci {
 ----
 <1> Only use this configuration if a https://drone.io[Drone agent] is detected.
 
+=== GitHub Actions
+
+[source,groovy]
+----
+ci {
+    githubactions { // <1>
+       test {
+         jvmArgs '-Xmx:2048m'
+       }
+    }
+}
+----
+<1> Only use this configuration if a https://help.github.com/en/actions/automating-your-workflow-with-github-actions[GitHub Actions] build is detected.
+
 === GitLab Runners
 
 [source,groovy]

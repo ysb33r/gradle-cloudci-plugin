@@ -27,6 +27,7 @@ enum CiEnvironment {
     CODEBUILD( 'codebuild','CODEBUILD_BUILD_ARN'),
     CODESHIP( 'codeship', 'CI_NAME'),
     DRONE('drone', 'DRONE'),
+    GITHUB_ACTIONS('githubactions','GITHUB_WORKFLOW'),
     GITLAB_CI('gitlabci', 'GITLAB_CI'),
     GO_CD('gocd', 'GO_SERVER_URL'),
     JENKINS_CI('jenkinsci', 'JENKINS_URL'),

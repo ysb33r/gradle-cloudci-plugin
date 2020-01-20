@@ -113,6 +113,14 @@ class CiExtension {
         configureConditionally GITLAB_CI, cfg
     }
 
+    void githubactions(@DelegatesTo(Project) Closure cfg) {
+        configureConditionally GITHUB_ACTIONS, cfg
+    }
+
+    void githubci(Action<Project> cfg) {
+        configureConditionally GITHUB_ACTIONS, cfg
+    }
+
     void gocd(@DelegatesTo(Project) Closure cfg) {
         configureConditionally GO_CD, cfg
     }
