@@ -40,7 +40,7 @@ enum CiEnvironment {
     boolean getDetected() {
         envVars.any { String var ->
             System.getenv(var) != null
-        }
+        } || System.getProperty("org.ysb33r.cloudci.${id}")
     }
 
     @Override
