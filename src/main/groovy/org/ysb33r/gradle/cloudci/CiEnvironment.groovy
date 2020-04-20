@@ -1,6 +1,6 @@
 /*
  * ============================================================================
- * (C) Copyright Schalk W. Cronje 2015 - 2019
+ * (C) Copyright Schalk W. Cronje 2015 - 2020
  *
  * This software is licensed under the Apache License 2.0
  * See http://www.apache.org/licenses/LICENSE-2.0 for license details
@@ -40,7 +40,7 @@ enum CiEnvironment {
     boolean getDetected() {
         envVars.any { String var ->
             System.getenv(var) != null
-        }
+        } || System.getProperty("org.ysb33r.cloudci.${id}")
     }
 
     @Override
