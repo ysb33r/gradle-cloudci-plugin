@@ -71,12 +71,6 @@ artifacts {
     archives javadocJar
 }
 
-jar {
-    manifest {
-        attributes 'Implementation-Title': moduleName, 'Implementation-Version': version
-    }
-}
-
 test {
     exclude '**/CiConditionalPluginWithEnvSpec.class'
     exclude '**/AppveyorTestReporterPluginSpec.class'
